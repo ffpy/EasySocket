@@ -25,11 +25,11 @@ public class EasyDatagramSocketReceiver extends AbstractEasyDatagramSocket {
 		return Packet.of(packet);
 	}
 
-	public void receives(ReceiveListener l) throws IOException {
-		receives(EasyDatagramSocket.DEFAULT_BUFSIZE, l);
+	public void receiveAll(ReceiveListener l) throws IOException {
+		receiveAll(EasyDatagramSocket.DEFAULT_BUFSIZE, l);
 	}
 
-	public void receives(int bufSize, ReceiveListener l) throws IOException {
+	public void receiveAll(int bufSize, ReceiveListener l) throws IOException {
 		Objects.requireNonNull(l);
 		//noinspection InfiniteLoopStatement
 		for (;;) {

@@ -42,19 +42,19 @@ public class EasyDatagramSocket {
 		}
 	}
 
-	public static void receives(int port, EasyDatagramSocketReceiver.ReceiveListener l) throws IOException {
+	public static void receiveAll(int port, EasyDatagramSocketReceiver.ReceiveListener l) throws IOException {
 		EasyDatagramSocketReceiver receiver = receiver(port);
 		try {
-			receiver.receives(l);
+			receiver.receiveAll(l);
 		} finally {
 			receiver.close();
 		}
 	}
 
-	public static void receives(int port, int bufSize, EasyDatagramSocketReceiver.ReceiveListener l) throws IOException {
+	public static void receiveAll(int port, int bufSize, EasyDatagramSocketReceiver.ReceiveListener l) throws IOException {
 		EasyDatagramSocketReceiver receiver = receiver(port);
 		try {
-			receiver.receives(bufSize, l);
+			receiver.receiveAll(bufSize, l);
 		} finally {
 			receiver.close();
 		}
