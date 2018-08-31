@@ -2,6 +2,8 @@ package org.easy.easysocket;
 
 import org.easy.easysocket.converter.JsonObjectConverter;
 import org.easy.easysocket.converter.SerializeObjectConverter;
+import org.easy.easysocket.process.GZIPCompressor;
+import org.easy.easysocket.process.ZIPCompressor;
 import org.junit.Test;
 
 import java.util.concurrent.Executors;
@@ -24,6 +26,10 @@ public class EasySocketTest {
                 EasySocket socket = new EasySocket("127.0.0.1", 7777);
                 socket.setObjectConverter(new JsonObjectConverter());
 //                socket.setObjectConverter(new SerializeObjectConverter());
+
+                socket.setCompressor(new ZIPCompressor());
+//                socket.setCompressor(new GZIPCompressor());
+
                 int n = socket.send(new Person("Hello", 20));
                 System.out.println("ClientThread send " + n + " bytes");
                 socket.close();
@@ -41,6 +47,10 @@ public class EasySocketTest {
                         Executors.newFixedThreadPool(10));
                 serverSocket.setObjectConverter(new JsonObjectConverter());
 //                serverSocket.setObjectConverter(new SerializeObjectConverter());
+
+                serverSocket.setCompressor(new ZIPCompressor());
+//                serverSocket.setCompressor(new GZIPCompressor());
+
                 serverSocket.listen(socket -> {
                     Person p = socket.receive(Person.class);
                     System.out.println("ServerThread receive: " + p);

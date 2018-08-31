@@ -2,6 +2,8 @@ package org.easy.easysocket;
 
 import org.easy.easysocket.callback.OnAccept;
 import org.easy.easysocket.converter.ObjectConverter;
+import org.easy.easysocket.process.Compressor;
+import org.easy.easysocket.process.Encryptor;
 import org.easy.easysocket.protocol.DataProtocol;
 import org.easy.easysocket.protocol.DefaultDataProtocol;
 
@@ -14,6 +16,8 @@ public class EasyServerSocket {
 	private Executor executor;
 	private DataProtocol dataProtocol = new DefaultDataProtocol();
     private ObjectConverter objectConverter;
+    private Compressor compressor;
+    private Encryptor encryptor;
 
 	public EasyServerSocket(int port, Executor executor) throws IOException {
 		this.serverSocket = new ServerSocket(port);
@@ -28,6 +32,14 @@ public class EasyServerSocket {
         this.objectConverter = objectConverter;
     }
 
+    public void setCompressor(Compressor compressor) {
+        this.compressor = compressor;
+    }
+
+    public void setEncryptor(Encryptor encryptor) {
+        this.encryptor = encryptor;
+    }
+
     /**
 	 * 监听
 	 */
@@ -35,8 +47,11 @@ public class EasyServerSocket {
 		for (;;) {
 			try {
 				EasySocket socket = new EasySocket(serverSocket.accept());
-				socket.setDataProtocol(dataProtocol);
-				socket.setObjectConverter(objectConverter);
+				if (dataProtocol != null) socket.setDataProtocol(dataProtocol);
+				if (objectConverter != null) socket.setObjectConverter(objectConverter);
+				if (compressor != null) socket.setCompressor(compressor);
+				if (encryptor != null) socket.setEncryptor(encryptor);
+
 				if (executor == null) {
 					onAccept.accept(socket);
 				} else {

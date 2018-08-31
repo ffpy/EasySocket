@@ -1,5 +1,6 @@
 package org.easy.easysocket.process;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -7,7 +8,7 @@ import java.io.InputStream;
  */
 public interface Compressor {
 
-    InputStream compress(InputStream is);
+    InputStream compress(InputStream is) throws IOException;
 
-    InputStream decompress(InputStream is);
+    InputStream decompress(InputStream is) throws IOException;
 }
