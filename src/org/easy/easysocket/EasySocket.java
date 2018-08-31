@@ -1,90 +1,113 @@
 package org.easy.easysocket;
 
+import org.easy.easysocket.process.Compressor;
+import org.easy.easysocket.process.Encryptor;
 import org.easy.easysocket.protocol.DataProtocol;
+import org.easy.easysocket.converter.ObjectConverter;
+import org.easy.easysocket.protocol.DefaultDataProtocol;
 
 import java.io.*;
 import java.net.Socket;
 import java.nio.channels.Channel;
 
 public class EasySocket {
-	private Socket socket;
-	private InputStream inputStream;
-	private OutputStream outputStream;
-	private DataProtocol dataProtocol;
+    private Socket socket;
+    private InputStream inputStream;
+    private OutputStream outputStream;
+    private ObjectConverter objectConverter;
+    private Compressor compressor;
+    private Encryptor encryptor;
+    private DataProtocol dataProtocol = new DefaultDataProtocol();
 
-	public EasySocket(String host, int port) throws IOException {
-		this(host, port, null);
-	}
+    public EasySocket(String host, int port) throws IOException {
+        this(new Socket(host, port));
+    }
 
-	public EasySocket(String host, int port, DataProtocol dataProtocol) throws IOException {
-		this(new Socket(host, port), dataProtocol);
-	}
+    public EasySocket(Socket socket) throws IOException {
+        this.socket = socket;
+        this.inputStream = socket.getInputStream();
+        this.outputStream = socket.getOutputStream();
+    }
 
-	public EasySocket(Socket socket) throws IOException {
-		this(socket, null);
-	}
+    public void setObjectConverter(ObjectConverter objectConverter) {
+        this.objectConverter = objectConverter;
+    }
 
-	public EasySocket(Socket socket, DataProtocol dataProtocol) throws IOException {
-		this.socket = socket;
-		this.inputStream = socket.getInputStream();
-		this.outputStream = socket.getOutputStream();
-		this.dataProtocol = dataProtocol;
-	}
+    public void setCompressor(Compressor compressor) {
+        this.compressor = compressor;
+    }
 
-	public void setDataProtocol(DataProtocol dataProtocol) {
-		this.dataProtocol = dataProtocol;
-	}
+    public void setEncryptor(Encryptor encryptor) {
+        this.encryptor = encryptor;
+    }
 
-	/**
-	 * 写入对象
-	 */
-	public int send(Object o) throws IOException {
-		checkDataProtocol();
-		return dataProtocol.send(outputStream, o);
-	}
+    public void setDataProtocol(DataProtocol dataProtocol) {
+        this.dataProtocol = dataProtocol;
+    }
 
-	/**
-	 * 读取对象
-	 */
-	public <T> T receive(Class<T> oClass) throws IOException {
-		checkDataProtocol();
-		return dataProtocol.receive(inputStream, oClass);
-	}
+    /**
+     * 发送对象
+     */
+    public int send(Object o) throws IOException {
+        InputStream is = objectConverter.fromObj(o);
+        if (encryptor != null) is = encryptor.encrypt(is);
+        if (compressor != null) is = compressor.compress(is);
+        return dataProtocol.write(is, outputStream);
+    }
 
-	/**
-	 * 获取输入流
-	 */
-	public InputStream getInputStream() {
-		return inputStream;
-	}
+    /**
+     * 写入数据
+     */
+    public void write(byte[] b, int off, int len) throws IOException {
+        outputStream.write(b, off, len);
+    }
 
-	/**
-	 * 获取输出流
-	 */
-	public OutputStream getOutputStream() {
-		return outputStream;
-	}
+    /**
+     * 接收对象
+     */
+    public <T> T receive(Class<T> c) throws IOException {
+        InputStream is = dataProtocol.read(inputStream);
+        if (compressor != null) is = compressor.decompress(is);
+        if (encryptor != null) is = encryptor.decrypt(is);
+        return objectConverter.toObj(is, c);
+    }
 
-	/**
-	 * 获取通道
-	 */
-	public Channel getChannel() {
-		return socket.getChannel();
-	}
+    /**
+     * 读取数据
+     */
+    public int read(byte[] b, int off, int len) throws IOException {
+        return inputStream.read(b, off, len);
+    }
 
-	/**
-	 * 关闭连接
-	 */
-	public void close() {
-		try {
-			socket.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    /**
+     * 获取输入流
+     */
+    public InputStream getInputStream() {
+        return inputStream;
+    }
 
-	private void checkDataProtocol() {
-		if (dataProtocol == null)
-			throw new RuntimeException("dataProtocol not exists");
-	}
+    /**
+     * 获取输出流
+     */
+    public OutputStream getOutputStream() {
+        return outputStream;
+    }
+
+    /**
+     * 获取通道
+     */
+    public Channel getChannel() {
+        return socket.getChannel();
+    }
+
+    /**
+     * 关闭连接
+     */
+    public void close() {
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

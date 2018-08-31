@@ -5,11 +5,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * 数据交换协议
+ * 数据传输协议
  */
 public interface DataProtocol {
 
-	int send(OutputStream os, Object o) throws IOException;
+    int write(InputStream from, OutputStream to) throws IOException;
 
-	<T> T receive(InputStream is, Class<T> oClass) throws IOException;
+    InputStream read(InputStream from) throws IOException;
 }
