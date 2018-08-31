@@ -1,4 +1,4 @@
-package org.easy.easysocket;
+package org.easy.easysocket.old;
 
 import java.io.IOException;
 import java.net.DatagramSocket;

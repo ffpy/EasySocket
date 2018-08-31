@@ -1,11 +1,10 @@
-package org.easy.easysocket;
+package org.easy.easysocket.old;
 
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
-import java.util.Arrays;
 
 /**
  * 数据包

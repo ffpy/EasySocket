@@ -1,11 +1,11 @@
-package org.easy.easysocket;
+package org.easy.easysocket.old;
 
+import org.easy.easysocket.old.EasyDatagramSocket;
+import org.easy.easysocket.old.Packet;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-
-import static org.junit.Assert.*;
 
 public class EasyDatagramSocketTest {
 
