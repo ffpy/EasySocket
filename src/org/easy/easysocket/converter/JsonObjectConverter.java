@@ -2,10 +2,10 @@ package org.easy.easysocket.converter;
 
 import com.google.gson.Gson;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.nio.charset.Charset;
 
 /**
@@ -15,11 +15,10 @@ public class JsonObjectConverter implements ObjectConverter {
 	private Charset charset = Charset.forName("UTF-8");
 
     @Override
-    public InputStream fromObj(Object o) throws IOException {
+    public void fromObj(OutputStream os, Object o) throws IOException {
         byte[] b = new Gson().toJson(o).getBytes(charset);
-        ByteArrayInputStream bis = new ByteArrayInputStream(b);
-        bis.close();
-        return bis;
+        os.write(b);
+        os.close();
     }
 
     @Override

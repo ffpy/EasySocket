@@ -6,13 +6,12 @@ import java.io.*;
  * 序列化对象转换器
  */
 public class SerializeObjectConverter implements ObjectConverter {
+
     @Override
-    public InputStream fromObj(Object o) throws IOException {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ObjectOutputStream oos = new ObjectOutputStream(bos);
+    public void fromObj(OutputStream os, Object o) throws IOException {
+        ObjectOutputStream oos = new ObjectOutputStream(os);
         oos.writeObject(o);
         oos.close();
-        return new ByteArrayInputStream(bos.toByteArray());
     }
 
     @Override

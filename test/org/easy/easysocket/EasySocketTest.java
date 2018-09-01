@@ -1,11 +1,9 @@
 package org.easy.easysocket;
 
 import org.easy.easysocket.converter.JsonObjectConverter;
-import org.easy.easysocket.converter.SerializeObjectConverter;
-import org.easy.easysocket.process.GZIPCompressor;
-import org.easy.easysocket.process.ZIPCompressor;
 import org.junit.Test;
 
+import java.nio.charset.Charset;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -14,7 +12,7 @@ public class EasySocketTest {
     @Test
     public void test() throws InterruptedException {
         new ServerThread().start();
-        TimeUnit.MILLISECONDS.sleep(500);
+        TimeUnit.MILLISECONDS.sleep(1000);
         new ClientThread().start();
         TimeUnit.SECONDS.sleep(5);
     }
@@ -25,12 +23,9 @@ public class EasySocketTest {
             try {
                 EasySocket socket = new EasySocket("127.0.0.1", 7777);
                 socket.setObjectConverter(new JsonObjectConverter());
-//                socket.setObjectConverter(new SerializeObjectConverter());
+                socket.setCompressor(null);
 
-                socket.setCompressor(new ZIPCompressor());
-//                socket.setCompressor(new GZIPCompressor());
-
-                int n = socket.send(new Person("Hello", 20));
+                int n = socket.send("ababababababababababababababababababababababababababababababababab");
                 System.out.println("ClientThread send " + n + " bytes");
                 socket.close();
             } catch (Exception e) {
@@ -46,14 +41,13 @@ public class EasySocketTest {
                 EasyServerSocket serverSocket = new EasyServerSocket(7777,
                         Executors.newFixedThreadPool(10));
                 serverSocket.setObjectConverter(new JsonObjectConverter());
-//                serverSocket.setObjectConverter(new SerializeObjectConverter());
-
-                serverSocket.setCompressor(new ZIPCompressor());
-//                serverSocket.setCompressor(new GZIPCompressor());
+                serverSocket.setCompressor(null);
 
                 serverSocket.listen(socket -> {
-                    Person p = socket.receive(Person.class);
-                    System.out.println("ServerThread receive: " + p);
+//                    String s = socket.receive(String.class);
+                    byte[] b = socket.read();
+                    String s = new String(b, Charset.forName("UTF-8"));
+                    System.out.println("ServerThread receive: " + s);
                     socket.close();
                     return false;
                 });

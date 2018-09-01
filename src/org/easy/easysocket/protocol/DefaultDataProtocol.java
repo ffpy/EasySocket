@@ -10,23 +10,18 @@ public class DefaultDataProtocol implements DataProtocol {
     private static final int BUF_SIZE = 1024;
 
     @Override
-    public int write(InputStream from, OutputStream to) throws IOException {
-        DataOutputStream dos = new DataOutputStream(to);
-        dos.writeInt(from.available());
-        byte[] buf = new byte[BUF_SIZE];
-        for (;;) {
-            int n = from.read(buf);
-            if (n <= 0) break;
-            dos.write(buf, 0, n);
-        }
+    public int write(byte[] b, int off, int len, OutputStream os) throws IOException {
+        DataOutputStream dos = new DataOutputStream(os);
+        dos.writeInt(len);
+        dos.write(b, off, len);
         dos.flush();
         return dos.size();
     }
 
     @Override
-    public InputStream read(InputStream from) throws IOException {
+    public byte[] read(InputStream is) throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        DataInputStream dis = new DataInputStream(from);
+        DataInputStream dis = new DataInputStream(is);
         int size = dis.readInt();
         byte[] buf = new byte[BUF_SIZE];
         for (int cnt = 0; cnt < size;) {
@@ -36,6 +31,6 @@ public class DefaultDataProtocol implements DataProtocol {
             cnt += n;
         }
         bos.close();
-        return new ByteArrayInputStream(bos.toByteArray());
+        return bos.toByteArray();
     }
 }
