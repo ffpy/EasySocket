@@ -1,4 +1,4 @@
-package org.easy.easysocket.process;
+package org.easy.easysocket.compressor;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -6,6 +6,9 @@ import java.io.OutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+/**
+ * GZIP压缩器
+ */
 public class GZIPCompressor implements Compressor {
 
     @Override

@@ -1,4 +1,4 @@
-package org.easy.easysocket.process;
+package org.easy.easysocket.compressor;
 
 import java.io.IOException;
 import java.io.InputStream;

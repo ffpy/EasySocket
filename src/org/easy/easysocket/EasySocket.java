@@ -1,10 +1,10 @@
 package org.easy.easysocket;
 
+import org.easy.easysocket.compressor.Compressor;
+import org.easy.easysocket.compressor.GZIPCompressor;
 import org.easy.easysocket.converter.ObjectConverter;
 import org.easy.easysocket.converter.SerializeObjectConverter;
-import org.easy.easysocket.process.Compressor;
-import org.easy.easysocket.process.Encryptor;
-import org.easy.easysocket.process.GZIPCompressor;
+import org.easy.easysocket.encryptor.Encryptor;
 import org.easy.easysocket.protocol.DataProtocol;
 import org.easy.easysocket.protocol.DefaultDataProtocol;
 
@@ -128,8 +128,8 @@ public class EasySocket {
      * @throws IOException IO异常
      */
     private InputStream wrapInputStream(InputStream is) throws IOException {
-        if (compressor != null) is = compressor.decompress(is);
         if (encryptor != null) is = encryptor.decrypt(is);
+        if (compressor != null) is = compressor.decompress(is);
         return is;
     }
 
@@ -141,8 +141,8 @@ public class EasySocket {
      * @throws IOException IO异常
      */
     private OutputStream wrapOutputStream(OutputStream os) throws IOException {
-        if (compressor != null) os = compressor.compress(os);
         if (encryptor != null) os = encryptor.encrypt(os);
+        if (compressor != null) os = compressor.compress(os);
         return os;
     }
 }

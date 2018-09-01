@@ -3,9 +3,9 @@ package org.easy.easysocket;
 import org.easy.easysocket.callback.OnAccept;
 import org.easy.easysocket.converter.ObjectConverter;
 import org.easy.easysocket.converter.SerializeObjectConverter;
-import org.easy.easysocket.process.Compressor;
-import org.easy.easysocket.process.Encryptor;
-import org.easy.easysocket.process.GZIPCompressor;
+import org.easy.easysocket.compressor.Compressor;
+import org.easy.easysocket.encryptor.Encryptor;
+import org.easy.easysocket.compressor.GZIPCompressor;
 import org.easy.easysocket.protocol.DataProtocol;
 import org.easy.easysocket.protocol.DefaultDataProtocol;
 
