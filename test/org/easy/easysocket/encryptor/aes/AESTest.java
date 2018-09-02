@@ -1,13 +1,13 @@
-package org.easy.easysocket.encryptor.des;
+package org.easy.easysocket.encryptor.aes;
 
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class DESTest {
+public class AESTest {
 
     private void check(byte[] data) {
-        DES des = new DES("12345678".getBytes());
+        AES des = new AES("1234567812345678".getBytes());
         byte[] encryptedData = des.encrypt(data, 0, data.length);
         byte[] decryptData = des.decrypt(encryptedData,0, encryptedData.length);
         assertArrayEquals(data, decryptData);
@@ -25,11 +25,11 @@ public class DESTest {
 
     @Test(expected = Exception.class)
     public void test3() {
-        new DES(null);
+        new AES(null);
     }
 
     @Test(expected = Exception.class)
     public void test4() {
-        new DES(new byte[0]);
+        new AES(new byte[0]);
     }
 }

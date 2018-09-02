@@ -13,10 +13,10 @@ public class DESEncryptor implements Encryptor {
     private final DES des;
 
     /**
-     * @param password 密钥字符串，长度要是8的倍数
+     * @param key 密钥，长度必须为8的倍数
      */
-    public DESEncryptor(String password) {
-        des = new DES(password.getBytes());
+    public DESEncryptor(String key) {
+        des = new DES(key.getBytes());
     }
 
     @Override

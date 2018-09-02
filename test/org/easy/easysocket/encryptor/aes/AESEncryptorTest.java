@@ -1,4 +1,4 @@
-package org.easy.easysocket.encryptor.des;
+package org.easy.easysocket.encryptor.aes;
 
 import org.junit.Test;
 
@@ -7,24 +7,24 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
 
-public class DESEncryptorTest {
-    private static final String password = "12345678";
+public class AESEncryptorTest {
+    private static final String password = "1234567812345678";
 
     @Test
     public void test1() throws IOException {
         // 原数据
-        byte[] data = "123456789".getBytes();
+        byte[] data = "12345678".getBytes();
         // 加密数据
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        DESOutputStream dos = new DESOutputStream(bos, new DES(password.getBytes()));
+        AESOutputStream dos = new AESOutputStream(bos, new AES(password.getBytes()));
         dos.write(data);
         dos.close();
         byte[] encryptedData = bos.toByteArray();
         // 解密数据
         ByteArrayInputStream bis = new ByteArrayInputStream(encryptedData);
-        DESInputStream dis = new DESInputStream(bis, new DES(password.getBytes()));
+        AESInputStream dis = new AESInputStream(bis, new AES(password.getBytes()));
         byte[] buf = new byte[1024];
         int n = dis.read(buf);
         byte[] decryptedData = Arrays.copyOf(buf, n);
@@ -39,7 +39,7 @@ public class DESEncryptorTest {
         byte[] data = "123456789".getBytes();
         // 加密数据
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        DESOutputStream dos = new DESOutputStream(bos, new DES(password.getBytes()));
+        AESOutputStream dos = new AESOutputStream(bos, new AES(password.getBytes()));
         for (int i = 0; i < data.length; i += blockSize) {
             dos.write(data, i, Math.min(blockSize, data.length - i));
         }
@@ -47,7 +47,7 @@ public class DESEncryptorTest {
         byte[] encryptedData = bos.toByteArray();
         // 解密数据
         ByteArrayInputStream bis = new ByteArrayInputStream(encryptedData);
-        DESInputStream dis = new DESInputStream(bis, new DES(password.getBytes()));
+        AESInputStream dis = new AESInputStream(bis, new AES(password.getBytes()));
         byte[] buf = new byte[blockSize];
         int i = 0;
         for (;;) {

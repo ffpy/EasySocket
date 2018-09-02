@@ -10,17 +10,10 @@ public abstract class EncryptOutputStream extends FilterOutputStream {
     /** 已经写入加密缓冲区的字节数 */
     private int pos;
 
-    public EncryptOutputStream(OutputStream out) {
+    public EncryptOutputStream(OutputStream out, int blockSize) {
         super(out);
-        this.buf = new byte[getBlockSize()];
+        this.buf = new byte[blockSize];
     }
-
-    /**
-     * 获取加密的块的大小
-     *
-     * @return 加密的块的大小
-     */
-    protected abstract int getBlockSize();
 
     /**
      * 加密数据块

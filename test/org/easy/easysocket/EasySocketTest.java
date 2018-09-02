@@ -1,6 +1,7 @@
 package org.easy.easysocket;
 
 import org.easy.easysocket.converter.JsonObjectConverter;
+import org.easy.easysocket.encryptor.aes.AESEncryptor;
 import org.easy.easysocket.encryptor.des.DESEncryptor;
 import org.junit.Test;
 
@@ -25,7 +26,8 @@ public class EasySocketTest {
                 EasySocket socket = new EasySocket("127.0.0.1", 7777);
                 socket.setObjectConverter(new JsonObjectConverter());
 //                socket.setCompressor(null);
-                socket.setEncryptor(new DESEncryptor("12345678"));
+//                socket.setEncryptor(new DESEncryptor("12345678"));
+                socket.setEncryptor(new AESEncryptor("1234567812345678"));
 
 //                int n = socket.send("ababababababababababababababababababababababababababababababababab");
 //                int n = socket.send("abc");
@@ -46,7 +48,8 @@ public class EasySocketTest {
                         Executors.newFixedThreadPool(10));
                 serverSocket.setObjectConverter(new JsonObjectConverter());
 //                serverSocket.setCompressor(null);
-                serverSocket.setEncryptor(new DESEncryptor("12345678"));
+//                serverSocket.setEncryptor(new DESEncryptor("12345678"));
+                serverSocket.setEncryptor(new AESEncryptor("1234567812345678"));
 
                 serverSocket.listen(socket -> {
 //                    String s = socket.receive(String.class);

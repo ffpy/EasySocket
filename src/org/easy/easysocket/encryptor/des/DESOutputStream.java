@@ -14,13 +14,8 @@ class DESOutputStream extends EncryptOutputStream {
 
 
     DESOutputStream(OutputStream out, DES des) {
-        super(out);
+        super(out, des.getBlockSize() - 1);
         this.des = Objects.requireNonNull(des);
-    }
-
-    @Override
-    protected int getBlockSize() {
-        return DES.BLOCK_SIZE - 1;
     }
 
     @Override

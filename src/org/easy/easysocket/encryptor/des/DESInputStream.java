@@ -13,17 +13,12 @@ class DESInputStream extends EncryptInputStream {
     private final DES des;
 
     DESInputStream(InputStream in, DES des) {
-        super(in);
+        super(in, des.getBlockSize());
         this.des = Objects.requireNonNull(des);
     }
 
     @Override
-    protected int getBlockSize() {
-        return DES.BLOCK_SIZE;
-    }
-
-    @Override
-    protected byte[] decrpty(byte[] b, int off, int len) {
-        return des.decrpty(b, off, len);
+    protected byte[] decrypt(byte[] b, int off, int len) {
+        return des.decrypt(b, off, len);
     }
 }

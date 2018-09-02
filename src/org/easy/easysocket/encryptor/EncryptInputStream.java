@@ -12,18 +12,11 @@ public abstract class EncryptInputStream extends FilterInputStream {
     /** 读取缓冲区 */
     private final byte[] rbuf;
 
-    protected EncryptInputStream(InputStream in) {
+    protected EncryptInputStream(InputStream in, int blockSize) {
         super(in);
-        this.buf = new byte[getBlockSize()];
-        this.rbuf = new byte[getBlockSize()];
+        this.buf = new byte[blockSize];
+        this.rbuf = new byte[blockSize];
     }
-
-    /**
-     * 获取解密的块的大小
-     *
-     * @return 解密的块的大小
-     */
-    protected abstract int getBlockSize();
 
     /**
      * 解密数据块
@@ -33,7 +26,7 @@ public abstract class EncryptInputStream extends FilterInputStream {
      * @param len 数据块的长度
      * @return 解密后的数据块
      */
-    protected abstract byte[] decrpty(byte[] b, int off, int len);
+    protected abstract byte[] decrypt(byte[] b, int off, int len);
 
     @Override
     public int read() throws IOException {
@@ -68,7 +61,7 @@ public abstract class EncryptInputStream extends FilterInputStream {
             for (;;) {
                 int n = in.read(rbuf);
                 if (n <= 0) break;
-                byte[] decrptyBytes = decrpty(rbuf, 0, n);
+                byte[] decrptyBytes = decrypt(rbuf, 0, n);
                 int copyLen = Math.min(len, decrptyBytes.length);
                 System.arraycopy(decrptyBytes, 0, b, off, copyLen);
                 off += copyLen;
