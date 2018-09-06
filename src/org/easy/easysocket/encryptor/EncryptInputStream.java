@@ -61,18 +61,18 @@ public abstract class EncryptInputStream extends FilterInputStream {
             for (;;) {
                 int n = in.read(rbuf);
                 if (n <= 0) break;
-                byte[] decrptyBytes = decrypt(rbuf, 0, n);
-                int copyLen = Math.min(len, decrptyBytes.length);
-                System.arraycopy(decrptyBytes, 0, b, off, copyLen);
+                byte[] decryptBytes = decrypt(rbuf, 0, n);
+                int copyLen = Math.min(len, decryptBytes.length);
+                System.arraycopy(decryptBytes, 0, b, off, copyLen);
                 off += copyLen;
                 len -= copyLen;
                 cnt += copyLen;
 
                 if (len <= 0) {
-                    int remainLen = decrptyBytes.length - copyLen;
+                    int remainLen = decryptBytes.length - copyLen;
                     // 把多余的数据保存到缓冲区
                     if (remainLen > 0) {
-                        System.arraycopy(decrptyBytes, copyLen, buf, size, remainLen);
+                        System.arraycopy(decryptBytes, copyLen, buf, size, remainLen);
                         size += remainLen;
                     }
                     break;
